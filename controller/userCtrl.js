@@ -51,7 +51,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 // handle refresh token
 
-const handleRefreshToken = asyncHandler(async (req, res) => {
+const handleRefreshToken = asyncHandler(async (req, res) => { // kiem tra token cu hop le thi moi tao token moi va tra ve cho nguoi dung
     const cookie = req.cookies; // len server doc gia tri cookies
     if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
     const refreshToken = cookie.refreshToken;
@@ -64,6 +64,30 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
         const accessToken = generateToken(user?._id);
         res.json({ accessToken });
     });
+});
+
+// logout functionality
+
+const logout = asyncHandler(async (req, res) => {
+    const cookie = req.cookies;
+    if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
+    const refreshToken = cookie.refreshToken;
+    const user = await User.findOne({ refreshToken });
+    if (!user) {
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: true,
+        });
+        return res.sendStatus(204); // forbidden
+    }
+    await User.findOneAndUpdate(refreshToken, {
+        refreshToken: "",
+    });
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+    });
+    res.sendStatus(204); // forbidden
 });
 
 // Update a user
@@ -191,5 +215,6 @@ module.exports = {
     blockUser,
     unblockUser,
     handleRefreshToken,
+    logout,
 
 }
