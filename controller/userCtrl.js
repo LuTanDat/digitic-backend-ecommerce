@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler"); // bat loi ma khong can t
 const { generateToken } = require("../config/jwtToken");
 const { generateRefreshToken } = require("../config/refreshtoken");
 const validateMongoDbId = require("../utils/validateMongodbId");
+const jwt = require("jsonwebtoken");
 
 const createUser = asyncHandler(async (req, res) => {
     const email = req.body.email;
@@ -31,9 +32,9 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             },
             { new: true }
         );
-        res.cookie("refreshToken", refreshToken, {
-            httpOnly: true,
-            maxAge: 72 * 60 * 60 * 1000,
+        res.cookie("refreshToken", refreshToken, { // luu len server xong mới phản hồi về client
+            httpOnly: true, // chi truy cap duoc = HTTP, khong truy cap duoc = JAVASCRIPT
+            maxAge: 72 * 60 * 60 * 1000, // time exists token, don vi milisecond
         });
         res.json({
             _id: findUser?._id,
@@ -50,20 +51,20 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
 
 // handle refresh token
 
-// const handleRefreshToken = asyncHandler(async (req, res) => {
-//     const cookie = req.cookies;
-//     if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
-//     const refreshToken = cookie.refreshToken;
-//     const user = await User.findOne({ refreshToken });
-//     if (!user) throw new Error(" No Refresh token present in db or not matched");
-//     jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
-//       if (err || user.id !== decoded.id) {
-//         throw new Error("There is something wrong with refresh token");
-//       }
-//       const accessToken = generateToken(user?._id);
-//       res.json({ accessToken });
-//     });
-//   });
+const handleRefreshToken = asyncHandler(async (req, res) => {
+    const cookie = req.cookies; // len server doc gia tri cookies
+    if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
+    const refreshToken = cookie.refreshToken;
+    const user = await User.findOne({ refreshToken });
+    if (!user) throw new Error(" No Refresh token present in db or not matched");
+    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
+        if (err || user.id !== decoded.id) {
+            throw new Error("There is something wrong with refresh token");
+        }
+        const accessToken = generateToken(user?._id);
+        res.json({ accessToken });
+    });
+});
 
 // Update a user
 
@@ -189,4 +190,6 @@ module.exports = {
     updatedUser,
     blockUser,
     unblockUser,
+    handleRefreshToken,
+
 }
