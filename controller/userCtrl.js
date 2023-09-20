@@ -70,9 +70,9 @@ const handleRefreshToken = asyncHandler(async (req, res) => { // kiem tra token 
 
 const logout = asyncHandler(async (req, res) => {
     const cookie = req.cookies;
-    if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");
+    if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies"); // kiem tra xem nguoi dung co dang nhap ko ?
     const refreshToken = cookie.refreshToken;
-    const user = await User.findOne({ refreshToken });
+    const user = await User.findOne({ refreshToken }); // kiem tra xem nguoi dung hop le ko ?
     if (!user) {
         res.clearCookie("refreshToken", {
             httpOnly: true,
