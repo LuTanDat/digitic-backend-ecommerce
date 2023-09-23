@@ -54,7 +54,7 @@ var userSchema = new mongoose.Schema({
 
 // ham nay chay truoc khi luu data vao db
 userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
+    if (!this.isModified("password")) { // thay doi khi reset password
         next();
     }
     const salt = await bcrypt.genSaltSync(10);
