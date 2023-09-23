@@ -48,7 +48,7 @@ var userSchema = new mongoose.Schema({
     passwordResetExpires: Date,
 },
     {
-        timestamps: true,
+        timestamps: true, // tu  dong cap nhat thoi gian tao va cap nhat cua document
     }
 );
 
