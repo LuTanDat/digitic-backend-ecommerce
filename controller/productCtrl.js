@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler"); // bat loi ma khong can trycatch
 const slugify = require("slugify"); // chuyen doi noi dung thanh slug tren URL
 
@@ -105,6 +106,98 @@ const getAllProduct = asyncHandler(async (req, res) => {
     }
 });
 
+// add product wish to user
+
+const addToWishlist = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { prodId } = req.body;
+    try {
+        const user = await User.findById(_id);
+        const alreadyadded = user.wishlist.find((id) => id.toString() === prodId);
+        if (alreadyadded) {
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $pull: { wishlist: prodId },
+                },
+                {
+                    new: true,
+                }
+            );
+            res.json(user);
+        } else {
+            let user = await User.findByIdAndUpdate(
+                _id,
+                {
+                    $push: { wishlist: prodId },
+                },
+                {
+                    new: true,
+                }
+            );
+            res.json(user);
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+const rating = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { star, prodId, comment } = req.body;
+    try {
+        const product = await Product.findById(prodId);
+        let alreadyRated = product.ratings.find(
+            (userId) => userId.postedby.toString() === _id.toString()
+        );
+        if (alreadyRated) {
+            const updateRating = await Product.updateOne(
+                {
+                    ratings: { $elemMatch: alreadyRated }, // tim kiem danh gia cua nguoi dung trong mang ratings
+                },
+                {
+                    $set: { "ratings.$.star": star, "ratings.$.comment": comment },// set lai gia tri
+                },
+                {
+                    new: true,
+                }
+            );
+        } else {
+            const rateProduct = await Product.findByIdAndUpdate(
+                prodId,
+                {
+                    $push: { // them danh gia
+                        ratings: {
+                            star: star,
+                            comment: comment,
+                            postedby: _id,
+                        },
+                    },
+                },
+                {
+                    new: true,
+                }
+            );
+        }
+        const getallratings = await Product.findById(prodId);
+        let totalRating = getallratings.ratings.length; // lay tong so luot danh gia
+        let ratingsum = getallratings.ratings
+            .map((item) => item.star) // chuyen mang cu thanh mang moi chi chua cac so sao
+            .reduce((prev, curr) => prev + curr, 0); // lay tong so sao danh gia, 0 la init value
+        let actualRating = Math.round(ratingsum / totalRating);
+        let finalproduct = await Product.findByIdAndUpdate(
+            prodId,
+            {
+                totalrating: actualRating,
+            },
+            { new: true }
+        );
+        res.json(finalproduct);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
 
 module.exports = {
     createProduct,
@@ -112,4 +205,7 @@ module.exports = {
     getAllProduct,
     updateProduct,
     deleteProduct,
+    addToWishlist,
+    rating,
+
 }
