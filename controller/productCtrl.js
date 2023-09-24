@@ -1,7 +1,9 @@
 const Product = require("../models/productModel");
 const User = require("../models/userModel");
+const validateMongoDbId = require("../utils/validateMongodbId");
 const asyncHandler = require("express-async-handler"); // bat loi ma khong can trycatch
 const slugify = require("slugify"); // chuyen doi noi dung thanh slug tren URL
+const cloudinaryUploadImg = require("../utils/cloudinary");
 
 const createProduct = asyncHandler(async (req, res) => {
     try {
@@ -198,6 +200,34 @@ const rating = asyncHandler(async (req, res) => {
     }
 });
 
+const uploadImages = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    validateMongoDbId(id);
+    try {
+        const uploader = (path) => cloudinaryUploadImg(path, "images");
+        const urls = []; // arr path img tren cloud
+        const files = req.files;
+        for (const file of files) {
+            const { path } = file;
+            const newpath = await uploader(path); // up img len cloud and return path tren cloud
+            urls.push(newpath);
+            // fs.unlinkSync(path);
+        }
+        const findProduct = await Product.findByIdAndUpdate(
+            id,
+            {
+                images: urls.map((file) => {
+                    return file;
+                })
+            },
+            { new: true }
+        )
+        res.json(findProduct);
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
 
 module.exports = {
     createProduct,
@@ -207,5 +237,5 @@ module.exports = {
     deleteProduct,
     addToWishlist,
     rating,
-
+    uploadImages,
 }
