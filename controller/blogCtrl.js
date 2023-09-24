@@ -28,8 +28,8 @@ const getBlog = asyncHandler(async (req, res) => {
     validateMongoDbId(id);
     try {
         const getBlog = await Blog.findById(id)
-        // .populate("likes")
-        // .populate("dislikes");
+            .populate("likes") // thay the objectID cua user trong arr likes => thong tin chi tiet of user
+            .populate("dislikes");
         const updateViews = await Blog.findByIdAndUpdate(
             id,
             {

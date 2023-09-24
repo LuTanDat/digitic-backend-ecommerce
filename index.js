@@ -6,6 +6,9 @@ const PORT = process.env.PORT || 4000;
 const authRouter = require("./routes/authRoute");
 const productRouter = require("./routes/productRoute");
 const blogRouter = require("./routes/blogRoute");
+const categoryRouter = require("./routes/prodcategoryRoute");
+const blogCategoryRouter = require("./routes/blogCatRoute");
+
 const bodyParser = require("body-parser");
 const { notFound, errorHandler } = require("./middlewares/errorHandler");
 const cookieParser = require("cookie-parser"); // xu ly va quan ly cookie
@@ -20,6 +23,8 @@ app.use(cookieParser());
 app.use("/api/user", authRouter);
 app.use("/api/product", productRouter);
 app.use("/api/blog", blogRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api/blogcategory", blogCategoryRouter);
 
 app.use(notFound);
 app.use(errorHandler);
