@@ -172,7 +172,6 @@ const uploadImages = asyncHandler(async (req, res) => {
             const { path } = file;
             const newpath = await uploader(path); // up img len cloud and return path tren cloud
             urls.push(newpath);
-            console.log(newpath);
             fs.unlinkSync(path);
         }
         const findBlog = await Blog.findByIdAndUpdate(
