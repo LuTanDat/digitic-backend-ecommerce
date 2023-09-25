@@ -4,6 +4,7 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 const asyncHandler = require("express-async-handler"); // bat loi ma khong can trycatch
 const slugify = require("slugify"); // chuyen doi noi dung thanh slug tren URL
 const cloudinaryUploadImg = require("../utils/cloudinary");
+const fs = require("fs");
 
 const createProduct = asyncHandler(async (req, res) => {
     try {
@@ -211,7 +212,7 @@ const uploadImages = asyncHandler(async (req, res) => {
             const { path } = file;
             const newpath = await uploader(path); // up img len cloud and return path tren cloud
             urls.push(newpath);
-            // fs.unlinkSync(path);
+            fs.unlinkSync(path);// delete image path
         }
         const findProduct = await Product.findByIdAndUpdate(
             id,

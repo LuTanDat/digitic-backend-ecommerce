@@ -36,7 +36,7 @@ const productImgResize = async (req, res, next) => {
                 .toFormat("jpeg")
                 .jpeg({ quality: 90 }) // quality = 90% goc
                 .toFile(`public/images/products/${file.filename}`); // dia chi luu file sau khi xu ly
-            // fs.unlinkSync(`public/images/products/${file.filename}`); // xoa file goc
+            fs.unlinkSync(`public/images/products/${file.filename}`); // xoa file goc
         })
     );
     next();
@@ -51,7 +51,7 @@ const blogImgResize = async (req, res, next) => {
                 .toFormat("jpeg")
                 .jpeg({ quality: 90 })
                 .toFile(`public/images/blogs/${file.filename}`);
-            // fs.unlinkSync(`public/images/blogs/${file.filename}`);
+            fs.unlinkSync(`public/images/blogs/${file.filename}`);
         })
     );
     next();
