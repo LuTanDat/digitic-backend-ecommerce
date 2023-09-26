@@ -546,5 +546,7 @@ module.exports = {
     emptyCart,
     applyCoupon,
     createOrder,
+    getOrders,
+    updateOrderStatus,
 
 }
