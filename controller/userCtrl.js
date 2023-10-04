@@ -547,6 +547,8 @@ module.exports = {
     applyCoupon,
     createOrder,
     getOrders,
+    getAllOrders,
+    getOrderByUserId,
     updateOrderStatus,
 
 }

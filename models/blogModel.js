@@ -45,10 +45,6 @@ var blogSchema = new mongoose.Schema(
             default: "Admin",
         },
         images: [],
-        // image: {
-        //     type: String,
-        //     default: "https://lorelleteaches.files.wordpress.com/2013/09/site-models-wordpress-blog-model.png"
-        // }
     },
     {
         toJSON: {
