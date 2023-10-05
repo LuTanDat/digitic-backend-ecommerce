@@ -39,13 +39,12 @@ var productSchema = new mongoose.Schema(
             default: 0,
             // select: false, // an sold khi nguoi dung get product
         },
-        // images: [
-        //     {
-        //         public_id: String,
-        //         url: String,
-        //     },
-        // ],
-        images: [],
+        images: [
+            {
+                public_id: String,
+                url: String,
+            },
+        ],
         color: [],
         tags: [],
         // tags: String,
