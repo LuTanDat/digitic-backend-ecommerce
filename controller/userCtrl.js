@@ -369,6 +369,8 @@ const getWishList = asyncHandler(async (req, res) => {
 //     }
 // });
 
+
+// create cart
 const userCart = asyncHandler(async (req, res) => {
     const { productId, color, quantity, price } = req.body;
     const { _id } = req.user;
@@ -388,6 +390,7 @@ const userCart = asyncHandler(async (req, res) => {
     }
 });
 
+// get all cart of user
 const getUserCart = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     validateMongoDbId(_id);
@@ -397,6 +400,33 @@ const getUserCart = asyncHandler(async (req, res) => {
             // "_id title price totalAfterDiscount"
         ).populate("color");
         res.json(cart);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+// delete a product in cart
+const removeProductFromCart = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { cartItemId } = req.params;
+    validateMongoDbId(_id);
+    try {
+        const deleteProductFromCart = await Cart.deleteOne({ userId: _id, _id: cartItemId })
+        res.json(deleteProductFromCart);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
+const updateProductQuantityFromCart = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { cartItemId, newQuantity } = req.params;
+    validateMongoDbId(_id);
+    try {
+        const cartItem = await Cart.findOne({ userId: _id, _id: cartItemId });
+        cartItem.quantity = newQuantity;
+        cartItem.save();
+        res.json(cartItem);
     } catch (error) {
         throw new Error(error);
     }
@@ -562,7 +592,9 @@ module.exports = {
     saveAddress,
     userCart,
     getUserCart,
+    removeProductFromCart,
     emptyCart,
+    updateProductQuantityFromCart,
     applyCoupon,
     createOrder,
     getOrders,
