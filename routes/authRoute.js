@@ -23,6 +23,9 @@ const { createUser,
     getMyOrders,
     getMonthWiseOrderIncome,
     getYearlyTotalOrders,
+    getAllOrders,
+    getSingleOrders,
+    updateOrder,
 
 } = require("../controller/userCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
@@ -45,7 +48,9 @@ router.post("/order/paymentVerification", authMiddleware, paymentVerification);
 router.post("/cart/create-order", authMiddleware, createOrder);
 router.get("/all-users", getallUser);
 router.get("/getmyorders", authMiddleware, getMyOrders);
-// router.get("/getallorders", authMiddleware, isAdmin, getAllOrders);
+router.get("/getallorders", authMiddleware, isAdmin, getAllOrders);
+router.get("/getaOrder/:id", authMiddleware, isAdmin, getSingleOrders);
+router.put("/updateOrder/:id", authMiddleware, isAdmin, updateOrder);
 // router.get("/getorderbyuser/:id", authMiddleware, isAdmin, getOrderByUserId);
 // router.post("/getorderbyuser/:id", authMiddleware, isAdmin, getAllOrders);
 router.get("/refresh", handleRefreshToken);
