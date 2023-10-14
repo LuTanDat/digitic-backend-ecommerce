@@ -463,6 +463,67 @@ const getMyOrders = asyncHandler(async (req, res) => {
     }
 });
 
+
+const getMonthWiseOrderIncome = asyncHandler(async (req, res) => {
+    let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    d = new Date();
+    let endDate = "";
+    d.setDate(1);
+    for (let index = 0; index < 11; index++) {
+        d.setMonth(d.getMonth() - 1);
+        endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
+    }
+    // console.log(endDate)
+    const data = await Order.aggregate([
+        {
+            $match: {
+                createdAt: {
+                    $lte: new Date(),
+                    $gte: new Date(endDate)
+                }
+            }
+        }, {
+            $group: {
+                _id: {
+                    month: { $month: "$createdAt" }
+                },
+                amount: { $sum: "$totalPriceAfterDiscount" },
+                count: { $sum: 1 }
+            }
+        }
+    ])
+    res.json(data);
+})
+
+const getYearlyTotalOrders = asyncHandler(async (req, res) => {
+    let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    d = new Date();
+    let endDate = "";
+    d.setDate(1);
+    for (let index = 0; index < 11; index++) {
+        d.setMonth(d.getMonth() - 1);
+        endDate = monthNames[d.getMonth()] + " " + d.getFullYear();
+    }
+    // console.log(endDate)
+    const data = await Order.aggregate([
+        {
+            $match: {
+                createdAt: {
+                    $lte: new Date(),
+                    $gte: new Date(endDate)
+                }
+            }
+        }, {
+            $group: {
+                _id: null,
+                count: { $sum: 1 },
+                amount: { $sum: "$totalPriceAfterDiscount" }
+            }
+        }
+    ])
+    res.json(data);
+})
+
 // const emptyCart = asyncHandler(async (req, res) => {
 //     const { _id } = req.user;
 //     validateMongoDbId(_id);
@@ -627,6 +688,8 @@ module.exports = {
     updateProductQuantityFromCart,
     createOrder,
     getMyOrders,
+    getMonthWiseOrderIncome,
+    getYearlyTotalOrders,
 
     // emptyCart,
     // applyCoupon,

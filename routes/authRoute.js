@@ -21,6 +21,8 @@ const { createUser,
     removeProductFromCart,
     updateProductQuantityFromCart,
     getMyOrders,
+    getMonthWiseOrderIncome,
+    getYearlyTotalOrders,
 
 } = require("../controller/userCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
@@ -50,6 +52,8 @@ router.get("/refresh", handleRefreshToken);
 router.get("/logout", logout);
 router.get("/wishlist", authMiddleware, getWishList);
 router.get("/cart", authMiddleware, getUserCart);
+router.get("/getMonthWiseOrderIncome", authMiddleware, getMonthWiseOrderIncome);
+router.get("/getYearlyTotalOrders", authMiddleware, getYearlyTotalOrders);
 
 router.get("/:id", authMiddleware, isAdmin, getaUser);
 router.delete("/delete-product-cart/:cartItemId", authMiddleware, removeProductFromCart);
