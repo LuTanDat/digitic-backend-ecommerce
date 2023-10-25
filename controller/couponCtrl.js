@@ -13,7 +13,7 @@ const createCoupon = asynHandler(async (req, res) => {
 
 const getAllCoupons = asynHandler(async (req, res) => {
     try {
-        const coupons = await Coupon.find();
+        const coupons = await Coupon.find().populate("product");
         res.json(coupons);
     } catch (error) {
         throw new Error(error);
@@ -23,7 +23,7 @@ const updateCoupon = asynHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDbId(id);
     try {
-        const updatecoupon = await Coupon.findByIdAndUpdate(id, req.body, {
+        const updatecoupon = await Coupon.findOneAndUpdate({ product: id }, req.body, {
             new: true,
         });
         res.json(updatecoupon);
@@ -45,7 +45,7 @@ const getCoupon = asynHandler(async (req, res) => {
     const { id } = req.params;
     validateMongoDbId(id);
     try {
-        const getAcoupon = await Coupon.findById(id);
+        const getAcoupon = await Coupon.findOne({ product: id }).populate("product");
         res.json(getAcoupon);
     } catch (error) {
         throw new Error(error);
