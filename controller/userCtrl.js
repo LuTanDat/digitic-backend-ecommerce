@@ -517,6 +517,18 @@ const updateOrder = asyncHandler(async (req, res) => {
     }
 });
 
+const deleteOrder = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    try {
+        const orders = await Order.findByIdAndDelete(id);
+        res.json({
+            orders
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
 const getMonthWiseOrderIncome = asyncHandler(async (req, res) => {
     let monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     d = new Date();
@@ -708,6 +720,7 @@ module.exports = {
     updateOrder,
     getMonthWiseOrderIncome,
     getYearlyTotalOrders,
+    deleteOrder,
     emptyCart,
 
     // applyCoupon,

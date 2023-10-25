@@ -26,6 +26,7 @@ const { createUser,
     getAllOrders,
     getSingleOrders,
     updateOrder,
+    deleteOrder,
     emptyCart,
 
 } = require("../controller/userCtrl");
@@ -66,6 +67,7 @@ router.delete("/delete-product-cart/:cartItemId", authMiddleware, removeProductF
 router.delete("/update-product-cart/:cartItemId/:newQuantity", authMiddleware, updateProductQuantityFromCart);
 router.delete("/empty-cart", authMiddleware, emptyCart);
 router.delete("/:id", deleteaUser);
+router.delete("/deleteOrder/:id", authMiddleware, isAdmin, deleteOrder);
 
 router.put("/edit-user", authMiddleware, updatedUser);
 router.put("/save-address", authMiddleware, saveAddress);
