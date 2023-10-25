@@ -217,9 +217,9 @@ const deleteaUser = asyncHandler(async (req, res) => {
     validateMongoDbId(id);
 
     try {
-        const deleteaUser = await User.findByIdAndDelete(id);
+        const deletedUser = await User.findByIdAndDelete(id);
         res.json({
-            deleteaUser
+            deletedUser
         });
     } catch (err) {
         throw new Error(err);
@@ -231,7 +231,7 @@ const blockUser = asyncHandler(async (req, res) => {
     validateMongoDbId(id);
 
     try {
-        const blockusr = await User.findByIdAndUpdate(
+        const blockUser = await User.findByIdAndUpdate(
             id,
             {
                 isBlocked: true,
@@ -242,6 +242,7 @@ const blockUser = asyncHandler(async (req, res) => {
         );
         //   res.json(blockusr);
         res.json({
+            blockUser,
             message: "User Blocked"
         })
     } catch (error) {
@@ -254,7 +255,7 @@ const unblockUser = asyncHandler(async (req, res) => {
     validateMongoDbId(id);
 
     try {
-        const unblock = await User.findByIdAndUpdate(
+        const unBlockUser = await User.findByIdAndUpdate(
             id,
             {
                 isBlocked: false,
@@ -264,6 +265,7 @@ const unblockUser = asyncHandler(async (req, res) => {
             }
         );
         res.json({
+            unBlockUser,
             message: "User UnBlocked",
         });
     } catch (error) {

@@ -71,7 +71,7 @@ router.delete("/deleteOrder/:id", authMiddleware, isAdmin, deleteOrder);
 
 router.put("/edit-user", authMiddleware, updatedUser);
 router.put("/save-address", authMiddleware, saveAddress);
-router.put("/block-user/:id", authMiddleware, isAdmin, blockUser);
-router.put("/unblock-user/:id", authMiddleware, isAdmin, unblockUser);
+router.put("/block-user/:id", blockUser);
+router.put("/unblock-user/:id", unblockUser);
 
 module.exports = router;

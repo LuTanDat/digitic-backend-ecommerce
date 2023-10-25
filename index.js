@@ -27,7 +27,16 @@ const cors = require('cors');
 dbConnect();
 
 app.use(morgan("dev"));
-app.use(cors());
+
+// Cấu hình CORS
+// c1 app.use(cors());
+// c2
+app.use(cors({
+    origin: "*", // Đặt domain của máy khách của bạn, hoặc "*" để cho phép từ tất cả các domain
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Các phương thức HTTP được phép
+    credentials: true, // Cho phép gửi và nhận cookie và các thông số khác qua CORS
+}));
+
 app.use(bodyParser.json());// Middleware này cho phép ứng dụng đọc dữ liệu dạng JSON và dữ liệu form được gửi từ client.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
