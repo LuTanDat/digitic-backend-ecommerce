@@ -9,34 +9,34 @@ var orderSchema = new mongoose.Schema(
             require: true
         },
         shippingInfo: {
-            firstName: {
+            name: {
                 type: String,
                 require: true
             },
-            lastName: {
-                type: String,
+            phone: {
+                type: Number,
                 require: true
             },
             address: {
                 type: String,
                 require: true
             },
-            city: {
-                type: String,
-                require: true
-            },
-            state: {
-                type: String,
-                require: true
-            },
-            other: {
-                type: String,
-                require: true
-            },
-            pincode: {
-                type: Number,
-                require: true
-            },
+            // city: {
+            //     type: String,
+            //     require: true
+            // },
+            // state: {
+            //     type: String,
+            //     require: true
+            // },
+            // other: {
+            //     type: String,
+            //     require: true
+            // },
+            // pincode: {
+            //     type: Number,
+            //     require: true
+            // },
         },
         paymentInfo: {
             razorpayOrderId: {
