@@ -22,13 +22,22 @@ var productSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        brand: {
+            type: String,
+            required: true,
+        },
         category: {
             type: String,
             required: true,
         },
-        brand: {
+        tags: {
             type: String,
             required: true,
+        },
+        // color: [{ type: mongoose.Schema.Types.ObjectId, ref: "Color" }],
+        color: {
+            type: String,
+            require: true,
         },
         quantity: {
             type: Number,
@@ -39,14 +48,31 @@ var productSchema = new mongoose.Schema(
             default: 0,
             // select: false, // an sold khi nguoi dung get product
         },
+        size: {
+            type: String,
+            required: true,
+        },
+        weight: {
+            type: String,
+            required: true,
+        },
+        power: {
+            type: String,
+        },
+        lifespan: {
+            type: String,
+            required: true,
+        },
+        warranty: {
+            type: String,
+            required: true,
+        },
         images: [
             {
                 public_id: String,
                 url: String,
             },
         ],
-        color: [{ type: mongoose.Schema.Types.ObjectId, ref: "Color" }],
-        tags: String,
         ratings: [
             {
                 star: Number,
