@@ -9,7 +9,11 @@ var orderSchema = new mongoose.Schema(
             require: true
         },
         shippingInfo: {
-            name: {
+            firstName: {
+                type: String,
+                require: true
+            },
+            lastName: {
                 type: String,
                 require: true
             },
@@ -76,7 +80,7 @@ var orderSchema = new mongoose.Schema(
         },
         month: {
             type: String,
-            default: new Date().getMonth()
+            default: new Date().getMonth() + 1
         },
         totalPrice: {
             type: Number,
