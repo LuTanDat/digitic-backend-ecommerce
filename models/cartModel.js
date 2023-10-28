@@ -38,8 +38,8 @@ var cartSchema = new mongoose.Schema(
             require: true
         },
         color: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Color",
+            type: String,
+            require: true
         }
     },
     {
