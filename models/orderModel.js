@@ -25,10 +25,10 @@ var orderSchema = new mongoose.Schema(
                 type: String,
                 require: true
             },
-            // city: {
-            //     type: String,
-            //     require: true
-            // },
+            city: {
+                type: String,
+                require: true
+            },
             // state: {
             //     type: String,
             //     require: true
@@ -43,14 +43,16 @@ var orderSchema = new mongoose.Schema(
             // },
         },
         paymentInfo: {
-            razorpayOrderId: {
-                type: String,
-                require: true
-            },
-            razorpayPaymentId: {
-                type: String,
-                require: true
-            }
+            type: String,
+            require: true,
+            // razorpayOrderId: {
+            //     type: String,
+            //     require: true
+            // },
+            // razorpayPaymentId: {
+            //     type: String,
+            //     require: true
+            // }
         },
         orderItems: [
             {
@@ -60,8 +62,9 @@ var orderSchema = new mongoose.Schema(
                     require: true
                 },
                 color: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    ref: "Color",
+                    // type: mongoose.Schema.Types.ObjectId,
+                    // ref: "Color",
+                    type: String,
                     require: true
                 },
                 quantity: {
