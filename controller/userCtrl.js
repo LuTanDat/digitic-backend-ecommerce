@@ -52,6 +52,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             email: findUser?.email,
             mobile: findUser?.mobile,
             address: findUser?.address,
+            city: findUser?.city,
             token: generateToken(findUser?._id),
         })
     } else {
@@ -141,14 +142,15 @@ const updatedUser = asyncHandler(async (req, res) => {
 
     try {
         const updatedUser = await User.findByIdAndUpdate(
-            _id,
-            {
-                firstName: req?.body?.firstName,
-                lastName: req?.body?.lastName,
-                email: req?.body?.email,
-                mobile: req?.body?.mobile,
-                address: req?.body?.address,
-            },
+            _id, req.body,
+            // {
+            //     firstName: req?.body?.firstName,
+            //     lastName: req?.body?.lastName,
+            //     email: req?.body?.email,
+            //     mobile: req?.body?.mobile,
+            //     address: req?.body?.address,
+            //     city: req?.body?.city,
+            // },
             {
                 new: true,
             }
