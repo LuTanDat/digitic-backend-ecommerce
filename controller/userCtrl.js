@@ -450,17 +450,77 @@ const updateProductQuantityFromCart = asyncHandler(async (req, res) => {
     }
 });
 
+// const createOrder = asyncHandler(async (req, res) => {
+//     const { shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod } = req.body;
+//     const { _id } = req.user;
+//     try {
+//         const order = await Order.create({
+//             shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod, user: _id
+//         })
+//         res.json({
+//             order,
+//             success: true
+//         })
+//     } catch (error) {
+//         throw new Error(error)
+//     }
+// })
+
 const createOrder = asyncHandler(async (req, res) => {
     const { shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod } = req.body;
     const { _id } = req.user;
+    let updateQuantity = true; // check so luong sp trong db con đủ khong ? đủ mới cho đặt hàng
+    let arrProduct = [];// mang chua cac sp khong du so luong trong db
     try {
-        const order = await Order.create({
-            shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod, user: _id
-        })
-        res.json({
-            order,
-            success: true
-        })
+        // Kiểm tra số lượng hàng tồn kho của từng sản phẩm trong đơn hàng
+        const promises = orderItems.map(async (item) => {
+            const product = await Product.findById(item?.product);
+            if (product?.quantity < item?.quantity) {
+                updateQuantity = false;
+                arrProduct.push(product.title);
+            }
+            return updateQuantity;
+        });
+
+        // Đợi cho tất cả các promises được giải quyết hoặc từ chối
+        const results = await Promise.all(promises)
+
+        console.log("results: ", results);
+        console.log("updateQuantity: ", updateQuantity);
+        console.log("arrProduct: ", arrProduct);
+
+
+        // Tất cả các sản phẩm đều có đủ hàng -> tạo đơn hàng mới và cập nhật số lượng hàng tồn kho và đã bán
+        if (updateQuantity) {
+            const createdOrder = await Order.create({
+                shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod, user: _id
+            })
+
+            // Cập nhật số lượng hàng tồn kho và đã bán cho từng sản phẩm trong đơn hàng
+            const updatePromises = orderItems.map(async (item) => {
+                const product = await Product.findById(item?.product);
+                product.quantity -= item?.quantity;
+                product.sold += item?.quantity;
+                await product.save();
+                return true;
+            });
+
+            // Đợi cho tất cả các promises được giải quyết hoặc từ chối
+            await Promise.all(updatePromises);
+
+            if (createOrder) {
+                res.json({
+                    createdOrder,
+                    message: 'SUCCESS'
+                })
+            }
+        } else {
+            res.json({
+                message: 'ERR',
+                product: arrProduct
+            })
+        }
+
     } catch (error) {
         throw new Error(error)
     }
