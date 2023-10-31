@@ -33,14 +33,18 @@ var cartSchema = new mongoose.Schema(
             type: Number,
             require: true
         },
+        color: {
+            type: String,
+            require: true
+        },
         price: {
             type: Number,
             require: true
         },
-        color: {
-            type: String,
+        priceAfterDiscount: {
+            type: Number,
             require: true
-        }
+        },
     },
     {
         timestamps: true,
