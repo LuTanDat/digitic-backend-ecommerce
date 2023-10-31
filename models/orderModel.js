@@ -42,18 +42,20 @@ var orderSchema = new mongoose.Schema(
             //     require: true
             // },
         },
-        paymentInfo: {
+        paymentMethod: {
             type: String,
             require: true,
-            // razorpayOrderId: {
-            //     type: String,
-            //     require: true
-            // },
-            // razorpayPaymentId: {
-            //     type: String,
-            //     require: true
-            // }
         },
+        // paymentInfo: {
+        //     razorpayOrderId: {
+        //         type: String,
+        //         require: true
+        //     },
+        //     razorpayPaymentId: {
+        //         type: String,
+        //         require: true
+        //     }
+        // },
         orderItems: [
             {
                 product: {
@@ -74,12 +76,19 @@ var orderSchema = new mongoose.Schema(
                 price: {
                     type: Number,
                     require: true
+                },
+                priceAfterDiscount: {
+                    type: Number,
+                    require: true
                 }
             }
         ],
+        isPaid: {
+            type: Boolean,
+            default: false
+        },
         paidAt: {
             type: Date,
-            default: Date.now()
         },
         month: {
             type: String,
