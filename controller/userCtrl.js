@@ -477,7 +477,10 @@ const createOrder = asyncHandler(async (req, res) => {
             const product = await Product.findById(item?.product);
             if (product?.quantity < item?.quantity) {
                 updateQuantity = false;
-                arrProduct.push(product.title);
+                arrProduct.push({
+                    title: product.title,
+                    quantity: product.quantity
+                });
             }
             return updateQuantity;
         });
