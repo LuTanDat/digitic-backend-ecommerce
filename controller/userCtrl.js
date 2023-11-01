@@ -585,6 +585,20 @@ const updateOrder = asyncHandler(async (req, res) => {
     }
 });
 
+const cancelOrder = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    try {
+        const orders = await Order.findByIdAndUpdate(id, {
+            orderStatus: "Đã Hủy"
+        })
+        res.json({
+            orders
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
 const deleteOrder = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
@@ -786,6 +800,7 @@ module.exports = {
     getAllOrders,
     getSingleOrders,
     updateOrder,
+    cancelOrder,
     getMonthWiseOrderIncome,
     getYearlyTotalOrders,
     deleteOrder,

@@ -28,6 +28,7 @@ const { createUser,
     updateOrder,
     deleteOrder,
     emptyCart,
+    cancelOrder,
 
 } = require("../controller/userCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
@@ -53,6 +54,7 @@ router.get("/getmyorders", authMiddleware, getMyOrders);
 router.get("/getallorders", authMiddleware, isAdmin, getAllOrders);
 router.get("/getaOrder/:id", authMiddleware, isAdmin, getSingleOrders);
 router.put("/updateOrder/:id", authMiddleware, isAdmin, updateOrder);
+router.put("/cancelOrder/:id", cancelOrder);
 // router.get("/getorderbyuser/:id", authMiddleware, isAdmin, getOrderByUserId);
 // router.post("/getorderbyuser/:id", authMiddleware, isAdmin, getAllOrders);
 router.get("/refresh", handleRefreshToken);
