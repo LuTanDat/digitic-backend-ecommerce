@@ -16,6 +16,7 @@ const couponRouter = require("./routes/couponRoute");
 const uploadRouter = require("./routes/uploadRoute");
 const supplierRouter = require("./routes/supplierRoute");
 const importNoteRouter = require("./routes/importNoteRoute");
+const paymentRouter = require("./routes/paymentRoute");
 
 
 const bodyParser = require("body-parser");
@@ -53,6 +54,7 @@ app.use("/api/coupon", couponRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/supplier", supplierRouter);
 app.use("/api/importNote", importNoteRouter);
+app.use("/api/payment", paymentRouter);
 
 
 app.use(notFound);
