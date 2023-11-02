@@ -467,7 +467,8 @@ const updateProductQuantityFromCart = asyncHandler(async (req, res) => {
 // })
 
 const createOrder = asyncHandler(async (req, res) => {
-    const { shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod } = req.body;
+    const { shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod, isPaid, paidAt } = req.body;
+
     const { _id } = req.user;
     let updateQuantity = true; // check so luong sp trong db con đủ khong ? đủ mới cho đặt hàng
     let arrProduct = [];// mang chua cac sp khong du so luong trong db
@@ -496,7 +497,7 @@ const createOrder = asyncHandler(async (req, res) => {
         // Tất cả các sản phẩm đều có đủ hàng -> tạo đơn hàng mới và cập nhật số lượng hàng tồn kho và đã bán
         if (updateQuantity) {
             const createdOrder = await Order.create({
-                shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod, user: _id
+                shippingInfo, orderItems, totalPrice, totalPriceAfterDiscount, paymentMethod, user: _id, isPaid, paidAt
             })
 
             // Cập nhật số lượng hàng tồn kho và đã bán cho từng sản phẩm trong đơn hàng
