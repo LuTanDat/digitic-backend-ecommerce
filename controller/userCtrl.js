@@ -53,6 +53,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             mobile: findUser?.mobile,
             address: findUser?.address,
             city: findUser?.city,
+            isBlocked: findUser?.isBlocked,
             token: generateToken(findUser?._id),
         })
     } else {
