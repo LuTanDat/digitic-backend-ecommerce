@@ -549,6 +549,7 @@ const getAllOrders = asyncHandler(async (req, res) => {
     try {
         const orders = await Order.find()
             .populate("user")
+            .populate("orderItems.product")
         res.json({
             orders
         });
