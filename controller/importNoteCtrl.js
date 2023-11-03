@@ -46,7 +46,7 @@ const getImportNote = asyncHandler(async (req, res) => {
 });
 const getallImportNote = asyncHandler(async (req, res) => {
     try {
-        const getallImportNote = await ImportNote.find();
+        const getallImportNote = await ImportNote.find().populate("nameSupplier");
         res.json(getallImportNote);
     } catch (error) {
         throw new Error(error);
