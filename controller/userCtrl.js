@@ -617,9 +617,23 @@ const cancelOrder = asyncHandler(async (req, res) => {
 const deleteOrder = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
-        const orders = await Order.findByIdAndDelete(id);
+        const order = await Order.findById(id);
+
+        // Cập nhật số lượng hàng tồn kho và đã bán cho từng sản phẩm trong đơn hàng
+        const updatePromises = order?.orderItems?.map(async (item) => {
+            const product = await Product.findById(item?.product._id);
+            product.quantity += item?.quantity;
+            product.sold -= item?.quantity;
+            await product.save();
+            return true;
+        });
+
+        // Đợi cho tất cả các promises được giải quyết hoặc từ chối
+        await Promise.all(updatePromises);
+
+        const deleteAOrder = await Order.findByIdAndDelete(id);
         res.json({
-            orders
+            deleteAOrder
         });
     } catch (error) {
         throw new Error(error);
