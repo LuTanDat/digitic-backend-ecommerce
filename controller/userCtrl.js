@@ -57,7 +57,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             token: generateToken(findUser?._id),
         })
     } else {
-        throw new Error("Invalid Credentials");
+        throw new Error("Thông tin không chính xác");
     }
 })
 
@@ -90,7 +90,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
             token: generateToken(findAdmin?._id),
         });
     } else {
-        throw new Error("Invalid Credentials");
+        throw new Error("Thông tin không chính xác");
     }
 });
 
