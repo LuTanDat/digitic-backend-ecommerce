@@ -89,7 +89,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
             email: findAdmin?.email,
             mobile: findAdmin?.mobile,
             token: generateToken(findAdmin?._id),
-            refreshToken: findAdmin?.refreshToken,
+            refreshToken: refreshToken,
         });
     } else {
         throw new Error("Thông tin không chính xác");
