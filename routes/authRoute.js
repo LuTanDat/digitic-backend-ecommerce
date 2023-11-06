@@ -57,7 +57,7 @@ router.put("/updateOrder/:id", authMiddleware, isAdmin, updateOrder);
 router.put("/cancelOrder/:id", authMiddleware, cancelOrder);
 // router.get("/getorderbyuser/:id", authMiddleware, isAdmin, getOrderByUserId);
 // router.post("/getorderbyuser/:id", authMiddleware, isAdmin, getAllOrders);
-router.get("/refresh", handleRefreshToken);
+router.post("/refresh", handleRefreshToken);
 router.get("/logout", logout);
 router.get("/wishlist", authMiddleware, getWishList);
 router.get("/cart", authMiddleware, getUserCart);

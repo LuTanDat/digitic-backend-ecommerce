@@ -35,7 +35,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
     if (findUser && await findUser.isPasswordMatched(password)) {
         const refreshToken = await generateRefreshToken(findUser?._id);
         const updateuser = await User.findByIdAndUpdate(
-            findUser.id,
+            findUser?._id,
             {
                 refreshToken: refreshToken,
             },
@@ -55,6 +55,7 @@ const loginUserCtrl = asyncHandler(async (req, res) => {
             city: findUser?.city,
             isBlocked: findUser?.isBlocked,
             token: generateToken(findUser?._id),
+            refreshToken: refreshToken,
         })
     } else {
         throw new Error("Thông tin không chính xác");
@@ -71,7 +72,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
     if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
         const refreshToken = await generateRefreshToken(findAdmin?._id);
         const updateuser = await User.findByIdAndUpdate(
-            findAdmin.id,
+            findAdmin?._id,
             {
                 refreshToken: refreshToken,
             },
@@ -88,6 +89,7 @@ const loginAdmin = asyncHandler(async (req, res) => {
             email: findAdmin?.email,
             mobile: findAdmin?.mobile,
             token: generateToken(findAdmin?._id),
+            refreshToken: findAdmin?.refreshToken,
         });
     } else {
         throw new Error("Thông tin không chính xác");
@@ -97,9 +99,11 @@ const loginAdmin = asyncHandler(async (req, res) => {
 // handle refresh token
 
 const handleRefreshToken = asyncHandler(async (req, res) => { // kiem tra token cu hop le thi moi tao token moi va tra ve cho nguoi dung
-    const cookie = req.cookies; // len server doc gia tri cookies
-    if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");// kiem tra xem nguoi dung co dang nhap ko ?
-    const refreshToken = cookie.refreshToken;
+    // const cookie = req.cookies; // len server doc gia tri cookies
+    // if (!cookie?.refreshToken) throw new Error("No Refresh Token in Cookies");// kiem tra xem nguoi dung co dang nhap ko ?
+    // const refreshToken = cookie.refreshToken;
+    const { refreshToken } = req.body;
+    if (!refreshToken) throw new Error("No Refresh Token")
     const user = await User.findOne({ refreshToken });// kiem tra xem nguoi dung hop le ko ? tranh hacker gui mot token gia mao
     if (!user) throw new Error(" No Refresh token present in db or not matched");
     jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
