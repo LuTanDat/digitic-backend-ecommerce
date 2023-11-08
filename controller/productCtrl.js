@@ -48,6 +48,13 @@ const getaProduct = asyncHandler(async (req, res) => {
     // validateMongoDbId(id);
     try {
         const findProduct = await Product.findById(id);
+        const updateViews = await Product.findByIdAndUpdate(
+            id,
+            {
+                $inc: { numViews: 1 }, // moi lan numViews increase len 1
+            },
+            { new: true }
+        );
         res.json(findProduct);
     } catch (error) {
         throw new Error(error);

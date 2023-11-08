@@ -48,6 +48,10 @@ var productSchema = new mongoose.Schema(
             default: 0,
             // select: false, // an sold khi nguoi dung get product
         },
+        numViews: {
+            type: Number,
+            default: 0,
+        },
         size: {
             type: String,
             required: true,
