@@ -22,7 +22,7 @@ const createUser = asyncHandler(async (req, res) => {
         const newUser = await User.create(req.body);
         res.json(newUser);
     } else {
-        throw new Error("User Already Exists"); // thẩy thông báo lỗi cho express-async-handler, để xử lý ở middlewares chung
+        throw new Error("Tài khoản đã tồn tại trong hệ thống"); // thẩy thông báo lỗi cho express-async-handler, để xử lý ở middlewares chung
     }
 })
 
