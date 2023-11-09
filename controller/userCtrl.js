@@ -663,18 +663,19 @@ const getMonthWiseOrderIncome = asyncHandler(async (req, res) => {
     // console.log(endDate)
     const data = await Order.aggregate([
         {
-            $match: {
+            $match: {// loc cac don hang
                 createdAt: {
                     $lte: new Date(),
                     $gte: new Date(endDate)
-                }
+                },
+                orderStatus: { $ne: "Đã Hủy" } // Thêm điều kiện $ne (not equal) vào $match để chỉ lấy những đơn hàng có orderStatus khác "Đã Hủy".
             }
         }, {
-            $group: {
-                _id: {
+            $group: { //nhom cac don hang
+                _id: { // dieu kien de nhom
                     month: { $month: "$createdAt" }
                 },
-                amount: { $sum: "$totalPriceAfterDiscount" },
+                amount: { $sum: "$totalPriceAfterDiscount" }, // thuc hien tinh toan
                 count: { $sum: 1 }
             }
         }
@@ -698,11 +699,14 @@ const getYearlyTotalOrders = asyncHandler(async (req, res) => {
                 createdAt: {
                     $lte: new Date(),
                     $gte: new Date(endDate)
-                }
+                },
+                orderStatus: { $ne: "Đã Hủy" } // Thêm điều kiện $ne (not equal) vào $match để chỉ lấy những đơn hàng có orderStatus khác "Đã Hủy".
             }
         }, {
             $group: {
-                _id: null,
+                _id: {
+                    year: { $year: "$createdAt" }
+                },
                 count: { $sum: 1 },
                 amount: { $sum: "$totalPriceAfterDiscount" }
             }
