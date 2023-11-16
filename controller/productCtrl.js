@@ -47,7 +47,7 @@ const getaProduct = asyncHandler(async (req, res) => {
     const { id } = req.params;
     // validateMongoDbId(id);
     try {
-        const findProduct = await Product.findById(id);
+        const findProduct = await Product.findById(id).populate("ratings.postedby");
         const updateViews = await Product.findByIdAndUpdate(
             id,
             {
