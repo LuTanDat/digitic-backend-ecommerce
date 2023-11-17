@@ -547,6 +547,8 @@ const getMyOrders = asyncHandler(async (req, res) => {
             .populate("user")
             .populate("orderItems.product")
             .populate("orderItems.color")
+            .sort("-createdAt"); // Sắp xếp theo thời gian tạo giảm dần C1
+        // .sort({ createdAt: -1 }); C2
         res.json({
             orders
         });
@@ -560,6 +562,7 @@ const getAllOrders = asyncHandler(async (req, res) => {
         const orders = await Order.find()
             .populate("user")
             .populate("orderItems.product")
+            .sort("-createdAt"); // Sắp xếp theo thời gian tạo giảm dần C1
         res.json({
             orders
         });
