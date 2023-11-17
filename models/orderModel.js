@@ -17,9 +17,9 @@ var orderSchema = new mongoose.Schema(
                 type: String,
                 require: true
             },
-            phone: {
-                type: Number,
-                require: true
+            mobile: {
+                type: String,
+                required: true,
             },
             address: {
                 type: String,
