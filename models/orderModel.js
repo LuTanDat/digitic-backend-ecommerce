@@ -28,34 +28,12 @@ var orderSchema = new mongoose.Schema(
             city: {
                 type: String,
                 require: true
-            },
-            // state: {
-            //     type: String,
-            //     require: true
-            // },
-            // other: {
-            //     type: String,
-            //     require: true
-            // },
-            // pincode: {
-            //     type: Number,
-            //     require: true
-            // },
+            }
         },
         paymentMethod: {
             type: String,
             require: true,
         },
-        // paymentInfo: {
-        //     razorpayOrderId: {
-        //         type: String,
-        //         require: true
-        //     },
-        //     razorpayPaymentId: {
-        //         type: String,
-        //         require: true
-        //     }
-        // },
         orderItems: [
             {
                 product: {
@@ -64,8 +42,6 @@ var orderSchema = new mongoose.Schema(
                     require: true
                 },
                 color: {
-                    // type: mongoose.Schema.Types.ObjectId,
-                    // ref: "Color",
                     type: String,
                     require: true
                 },
@@ -94,11 +70,15 @@ var orderSchema = new mongoose.Schema(
             type: String,
             default: new Date().getMonth() + 1
         },
-        totalPrice: {
+        itemsPrice: {
             type: Number,
             require: true
         },
-        totalPriceAfterDiscount: {
+        shippingPrice: {
+            type: Number,
+            require: true
+        },
+        totalPrice: {
             type: Number,
             require: true
         },
