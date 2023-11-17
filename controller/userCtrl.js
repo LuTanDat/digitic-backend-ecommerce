@@ -574,13 +574,11 @@ const getAllOrders = asyncHandler(async (req, res) => {
 const getSingleOrders = asyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
-        const orders = await Order.findOne({ _id: id })
+        const aOrder = await Order.findOne({ _id: id })
             .populate("user")
             .populate("orderItems.product")
-            .populate("orderItems.color")
-        res.json({
-            orders
-        });
+
+        res.json(aOrder);
     } catch (error) {
         throw new Error(error);
     }
