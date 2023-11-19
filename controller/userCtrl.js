@@ -763,6 +763,23 @@ const calculateCategoryRevenue = asyncHandler(async (req, res) => {
     }
 })
 
+const getOrderStatusCounts = asyncHandler(async (req, res) => {
+    try {
+        const orderStatusCounts = await Order.aggregate([
+            {
+                $group: {
+                    _id: "$orderStatus",
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
+        res.json(orderStatusCounts);
+    } catch (error) {
+        console.error(error);
+    }
+})
+
 // const applyCoupon = asyncHandler(async (req, res) => {
 //     const { coupon } = req.body;
 //     const { _id } = req.user;
@@ -896,6 +913,7 @@ module.exports = {
     getMonthWiseOrderIncome,
     getYearlyTotalOrders,
     calculateCategoryRevenue,
+    getOrderStatusCounts,
     deleteOrder,
     emptyCart,
 
