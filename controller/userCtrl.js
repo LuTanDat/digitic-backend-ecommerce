@@ -675,7 +675,7 @@ const getMonthWiseOrderIncome = asyncHandler(async (req, res) => {
                 _id: { // dieu kien de nhom
                     month: { $month: "$createdAt" }
                 },
-                amount: { $sum: "$totalPriceAfterDiscount" }, // thuc hien tinh toan
+                amount: { $sum: "$totalPrice" }, // thuc hien tinh toan
                 count: { $sum: 1 }
             }
         }
@@ -708,7 +708,7 @@ const getYearlyTotalOrders = asyncHandler(async (req, res) => {
                     year: { $year: "$createdAt" }
                 },
                 count: { $sum: 1 },
-                amount: { $sum: "$totalPriceAfterDiscount" }
+                amount: { $sum: "$totalPrice" }
             }
         }
     ])
