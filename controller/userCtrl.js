@@ -771,7 +771,11 @@ const getOrderStatusCounts = asyncHandler(async (req, res) => {
                     _id: "$orderStatus",
                     count: { $sum: 1 }
                 }
-            }
+            }, {
+                $sort: {
+                    orderStatusCounts: -1
+                },
+            },
         ]);
 
         res.json(orderStatusCounts);
