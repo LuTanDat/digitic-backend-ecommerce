@@ -678,6 +678,10 @@ const getMonthWiseOrderIncome = asyncHandler(async (req, res) => {
                 amount: { $sum: "$totalPrice" }, // thuc hien tinh toan
                 count: { $sum: 1 }
             }
+        }, {
+            $sort: {
+                "_id.month": 1 // Sắp xếp theo tháng tăng dần
+            }
         }
     ])
     res.json(data);
@@ -710,9 +714,53 @@ const getYearlyTotalOrders = asyncHandler(async (req, res) => {
                 count: { $sum: 1 },
                 amount: { $sum: "$totalPrice" }
             }
+        }, {
+            $sort: {
+                "_id.year": 1 // Sắp xếp theo năm tăng dần
+            }
         }
     ])
     res.json(data);
+})
+
+const calculateCategoryRevenue = asyncHandler(async (req, res) => {
+    try {
+        const categoryRevenue = await Order.aggregate([
+            {
+                $match: {
+                    orderStatus: { $ne: 'Đã Hủy' },
+                },
+            },
+            {
+                $unwind: '$orderItems',
+            },
+            {
+                $lookup: {
+                    from: 'products', // Tên của collection của sản phẩm
+                    localField: 'orderItems.product',
+                    foreignField: '_id',
+                    as: 'productDetails',
+                },
+            },
+            {
+                $unwind: '$productDetails',
+            },
+            {
+                $group: {
+                    _id: '$productDetails.category',
+                    totalRevenue: { $sum: '$orderItems.priceAfterDiscount' },
+                },
+            }, {
+                $sort: {
+                    totalRevenue: -1 // Sắp xếp theo doanh thu giảm dần
+                },
+            },
+        ]);
+
+        res.json(categoryRevenue);
+    } catch (error) {
+        console.error(error);
+    }
 })
 
 // const applyCoupon = asyncHandler(async (req, res) => {
@@ -847,6 +895,7 @@ module.exports = {
     cancelOrder,
     getMonthWiseOrderIncome,
     getYearlyTotalOrders,
+    calculateCategoryRevenue,
     deleteOrder,
     emptyCart,
 
