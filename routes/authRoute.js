@@ -31,6 +31,7 @@ const { createUser,
     cancelOrder,
     calculateCategoryRevenue,
     getOrderStatusCounts,
+    countOutOfStockProducts,
 
 } = require("../controller/userCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
@@ -67,6 +68,7 @@ router.get("/getMonthWiseOrderIncome", authMiddleware, getMonthWiseOrderIncome);
 router.get("/getYearlyTotalOrders", authMiddleware, getYearlyTotalOrders);
 router.get("/getCategoryRevenue", authMiddleware, calculateCategoryRevenue);
 router.get("/getOrderStatusCounts", authMiddleware, getOrderStatusCounts);
+router.get("/countOutOfStockProducts", authMiddleware, countOutOfStockProducts);
 
 router.get("/:id", authMiddleware, getaUser);
 router.delete("/delete-product-cart/:cartItemId", authMiddleware, removeProductFromCart);

@@ -784,6 +784,28 @@ const getOrderStatusCounts = asyncHandler(async (req, res) => {
     }
 })
 
+const countOutOfStockProducts = asyncHandler(async (req, res) => {
+    try {
+        const outOfStockProductsCount = await Product.aggregate([
+            {
+                $match: {
+                    quantity: 0 // Chỉ lấy sản phẩm có quantity bằng 0
+                }
+            },
+            {
+                $count: "outOfStockCount" // Đếm số lượng sản phẩm hết hàng
+            }
+        ]);
+
+        // Kết quả trả về sẽ là một mảng, nếu mảng rỗng tức là không có sản phẩm hết hàng
+        const count = outOfStockProductsCount.length > 0 ? outOfStockProductsCount[0].outOfStockCount : 0;
+
+        res.json(count);
+    } catch (error) {
+        console.error(error);
+    }
+})
+
 // const applyCoupon = asyncHandler(async (req, res) => {
 //     const { coupon } = req.body;
 //     const { _id } = req.user;
@@ -918,6 +940,7 @@ module.exports = {
     getYearlyTotalOrders,
     calculateCategoryRevenue,
     getOrderStatusCounts,
+    countOutOfStockProducts,
     deleteOrder,
     emptyCart,
 
