@@ -723,6 +723,28 @@ const getYearlyTotalOrders = asyncHandler(async (req, res) => {
     res.json(data);
 })
 
+const countLowStockProducts = asyncHandler(async (req, res) => {
+    try {
+        const lowStockProductsCount = await Product.aggregate([
+            {
+                $match: {
+                    quantity: { $lte: 10 } // Chỉ lấy sản phẩm có số lượng nhỏ hơn hoặc bằng 10
+                }
+            },
+            {
+                $count: "lowStockCount" // Đếm số lượng sản phẩm có số lượng nhỏ hơn hoặc bằng 10
+            }
+        ]);
+
+        // Kết quả trả về sẽ là một mảng, nếu mảng rỗng tức là không có sản phẩm nào thỏa điều kiện
+        const count = lowStockProductsCount.length > 0 ? lowStockProductsCount[0].lowStockCount : 0;
+
+        res.json(count);
+    } catch (error) {
+        console.error(error);
+    }
+});
+
 const calculateCategoryRevenue = asyncHandler(async (req, res) => {
     try {
         const categoryRevenue = await Order.aggregate([
@@ -763,6 +785,27 @@ const calculateCategoryRevenue = asyncHandler(async (req, res) => {
     }
 })
 
+const inventoryStatsByCategory = asyncHandler(async (req, res) => {
+    try {
+        const inventoryStats = await Product.aggregate([
+            {
+                $group: {
+                    _id: "$category",
+                    totalQuantity: { $sum: "$quantity" },
+                },
+            }, {
+                $sort: {
+                    totalQuantity: 1 // Sắp xếp tăng dần
+                },
+            },
+        ]);
+
+        res.json(inventoryStats);
+    } catch (error) {
+        console.error(error);
+    }
+})
+
 const getOrderStatusCounts = asyncHandler(async (req, res) => {
     try {
         const orderStatusCounts = await Order.aggregate([
@@ -783,29 +826,6 @@ const getOrderStatusCounts = asyncHandler(async (req, res) => {
         console.error(error);
     }
 })
-
-const countLowStockProducts = asyncHandler(async (req, res) => {
-    try {
-        const lowStockProductsCount = await Product.aggregate([
-            {
-                $match: {
-                    quantity: { $lte: 10 } // Chỉ lấy sản phẩm có số lượng nhỏ hơn hoặc bằng 10
-                }
-            },
-            {
-                $count: "lowStockCount" // Đếm số lượng sản phẩm có số lượng nhỏ hơn hoặc bằng 10
-            }
-        ]);
-
-        // Kết quả trả về sẽ là một mảng, nếu mảng rỗng tức là không có sản phẩm nào thỏa điều kiện
-        const count = lowStockProductsCount.length > 0 ? lowStockProductsCount[0].lowStockCount : 0;
-
-        res.json(count);
-    } catch (error) {
-        console.error(error);
-    }
-});
-
 
 // const applyCoupon = asyncHandler(async (req, res) => {
 //     const { coupon } = req.body;
@@ -942,6 +962,7 @@ module.exports = {
     calculateCategoryRevenue,
     getOrderStatusCounts,
     countLowStockProducts,
+    inventoryStatsByCategory,
     deleteOrder,
     emptyCart,
 
