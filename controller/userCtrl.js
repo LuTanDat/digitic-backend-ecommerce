@@ -728,11 +728,11 @@ const countLowStockProducts = asyncHandler(async (req, res) => {
         const lowStockProductsCount = await Product.aggregate([
             {
                 $match: {
-                    quantity: { $lte: 10 } // Chỉ lấy sản phẩm có số lượng nhỏ hơn hoặc bằng 10
+                    quantity: { $lte: 15 } // Chỉ lấy sản phẩm có số lượng nhỏ hơn hoặc bằng 15
                 }
             },
             {
-                $count: "lowStockCount" // Đếm số lượng sản phẩm có số lượng nhỏ hơn hoặc bằng 10
+                $count: "lowStockCount" // Đếm số lượng sản phẩm có số lượng nhỏ hơn hoặc bằng 15
             }
         ]);
 
