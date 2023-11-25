@@ -816,12 +816,38 @@ const getOrderStatusCounts = asyncHandler(async (req, res) => {
                 }
             }, {
                 $sort: {
-                    orderStatusCounts: -1
+                    count: -1
                 },
             },
         ]);
 
         res.json(orderStatusCounts);
+    } catch (error) {
+        console.error(error);
+    }
+})
+
+const getPaymentMethodCounts = asyncHandler(async (req, res) => {
+    try {
+        const paymentMethodCounts = await Order.aggregate([
+            {
+                $match: {
+                    orderStatus: { $ne: 'Đã Hủy' },
+                },
+            },
+            {
+                $group: {
+                    _id: "$paymentMethod",
+                    count: { $sum: 1 },
+                },
+            }, {
+                $sort: {
+                    count: -1
+                },
+            },
+        ]);
+
+        res.json(paymentMethodCounts);
     } catch (error) {
         console.error(error);
     }
@@ -961,6 +987,7 @@ module.exports = {
     getYearlyTotalOrders,
     calculateCategoryRevenue,
     getOrderStatusCounts,
+    getPaymentMethodCounts,
     countLowStockProducts,
     inventoryStatsByCategory,
     deleteOrder,

@@ -33,6 +33,7 @@ const { createUser,
     getOrderStatusCounts,
     countLowStockProducts,
     inventoryStatsByCategory,
+    getPaymentMethodCounts,
 
 } = require("../controller/userCtrl");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
@@ -69,6 +70,7 @@ router.get("/getMonthWiseOrderIncome", authMiddleware, getMonthWiseOrderIncome);
 router.get("/getYearlyTotalOrders", authMiddleware, getYearlyTotalOrders);
 router.get("/getCategoryRevenue", authMiddleware, calculateCategoryRevenue);
 router.get("/getOrderStatusCounts", authMiddleware, getOrderStatusCounts);
+router.get("/getPaymentMethodCounts", authMiddleware, getPaymentMethodCounts);
 router.get("/countLowStockProducts", authMiddleware, countLowStockProducts);
 router.get("/inventoryStatsByCategory", authMiddleware, inventoryStatsByCategory);
 
