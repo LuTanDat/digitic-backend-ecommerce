@@ -450,11 +450,29 @@ const updateProductQuantityFromCart = asyncHandler(async (req, res) => {
     const { _id } = req.user;
     const { cartItemId, newQuantity } = req.params;
     validateMongoDbId(_id);
+    let updateQuantity = true; // check so luong sp trong db con đủ khong ? đủ mới cho update
+
     try {
         const cartItem = await Cart.findOne({ userId: _id, _id: cartItemId });
-        cartItem.quantity = newQuantity;
-        cartItem.save();
-        res.json(cartItem);
+
+        // Kiểm tra số lượng hàng tồn kho của sản phẩm trong đơn hàng
+        const product = await Product.findById(cartItem?.productId);
+        if (product?.quantity < newQuantity) {
+            updateQuantity = false;
+        }
+
+        if (updateQuantity) {
+            cartItem.quantity = newQuantity;
+            cartItem.save();
+            res.json({
+                cartItem,
+                message: 'SUCCESS'
+            })
+        } else {
+            res.json({
+                message: 'ERR'
+            })
+        }
     } catch (error) {
         throw new Error(error);
     }
