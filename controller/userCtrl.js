@@ -302,15 +302,15 @@ const updatePassword = asyncHandler(async (req, res) => {
 const forgotPasswordToken = asyncHandler(async (req, res) => {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user) throw new Error("User not found with this email");
+    if (!user) throw new Error("Email không tồn tại");
     try {
         const token = await user.createPasswordResetToken();
         await user.save();
-        const resetURL = `Xin chào, Vui lòng nhấp vào liên kết này để đặt lại Mật khẩu của bạn. Liên kết này có hiệu lực đến 10 phút kể từ bây giờ. <a href='http://localhost:3001/reset-password/${token}'>Click Here</>`;
+        const resetURL = `Xin chào, Vui lòng nhấp vào liên kết này để đặt lại Mật khẩu của bạn. Liên kết này có hiệu lực trong vòng 10 phút kể từ bây giờ. <a href='http://localhost:3001/reset-password/${token}'>Click Here</>`;
         const data = {
             to: email,
-            text: "Hey User",
-            subject: "Forgot Password Link",
+            text: "Chào bạn",
+            subject: "Liên kết đặt lại mật khẩu",
             htm: resetURL,
         };
         sendEmail(data);
