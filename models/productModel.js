@@ -88,6 +88,11 @@ var productSchema = new mongoose.Schema(
             type: String,
             default: 0,
         },
+        supplierID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Supplier',
+            required: true,
+        },
     },
     { timestamps: true }
 );
