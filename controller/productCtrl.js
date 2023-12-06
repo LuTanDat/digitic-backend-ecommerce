@@ -61,6 +61,17 @@ const getaProduct = asyncHandler(async (req, res) => {
     }
 });
 
+const getProductbySupplier = asyncHandler(async (req, res) => {
+    const { id } = req.params;
+    // validateMongoDbId(id);
+    try {
+        const findProduct = await Product.find({ supplierID: id })
+        res.json(findProduct);
+    } catch (error) {
+        throw new Error(error);
+    }
+});
+
 const getAllProduct = asyncHandler(async (req, res) => {
     try {
         // Filtering
@@ -217,4 +228,5 @@ module.exports = {
     deleteProduct,
     addToWishlist,
     rating,
+    getProductbySupplier
 }
